@@ -1,5 +1,7 @@
+package org.example.StringHashTable;
+
 public interface HashTableInterface {
-    bool search(string str);
-    void insert(string str);
-    void delete(string str);
+    Boolean search(String str);
+    void insert(String str);
+    void delete(String str);
 }
