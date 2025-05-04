@@ -32,7 +32,7 @@ public class PrimeGenerator {
         return primes.get((int) (Math.random() * primes.size()));
     }
 
-    public PrimeGenerator getInstance(){
+    public static PrimeGenerator getInstance(){
         if(primeGenerator != null){
             primeGenerator = new PrimeGenerator();
         }
