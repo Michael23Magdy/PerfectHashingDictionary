@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PrimeGenerator {
-    private PrimeGenerator primeGenerator;
+    private static PrimeGenerator primeGenerator;
     List<Integer> primes = new ArrayList<>();
     private PrimeGenerator(){
         int limit = 1000000;
