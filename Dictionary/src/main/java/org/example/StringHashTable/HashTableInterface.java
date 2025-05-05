@@ -4,4 +4,5 @@ public interface HashTableInterface {
     Boolean search(String str);
     void insert(String str);
     void delete(String str);
+    int getSize();
 }
