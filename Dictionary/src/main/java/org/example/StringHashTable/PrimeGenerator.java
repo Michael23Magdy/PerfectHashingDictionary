@@ -33,7 +33,7 @@ public class PrimeGenerator {
     }
 
     public static PrimeGenerator getInstance(){
-        if(primeGenerator != null){
+        if(primeGenerator == null){
             primeGenerator = new PrimeGenerator();
         }
         return primeGenerator;
