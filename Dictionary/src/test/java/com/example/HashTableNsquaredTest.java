@@ -143,4 +143,98 @@ class HashTableNsquaredTest {
 
         assertEquals(1000, hashTable.getSize());
     }
+
+    @Test
+    void testCaseSensitivity() {
+        hashTable.insert("apple");
+        hashTable.insert("Apple");
+
+        assertTrue(hashTable.search("apple"));
+        assertTrue(hashTable.search("Apple"));
+        assertNotEquals("apple", "Apple");
+    }
+
+    @Test
+    void testRehashingAndCollision() {
+        hashTable.insert("collision1");
+        hashTable.insert("collision2");
+        hashTable.insert("collision3");
+
+        // Trigger rehashing
+        hashTable.insert("collision4");
+
+        assertTrue(hashTable.search("collision1"));
+        assertTrue(hashTable.search("collision2"));
+        assertTrue(hashTable.search("collision3"));
+        assertTrue(hashTable.search("collision4"));
+    }
+
+    @Test
+    void testNullSearchDoesNotCrash() {
+        assertFalse(hashTable.search(null));
+    }
+
+    @Test
+    void testInsertLargeNumber() {
+        for (int i = 0; i < 10000; i++) {
+            hashTable.insert("item" + i);
+        }
+
+        for (int i = 0; i < 10000; i++) {
+            assertTrue(hashTable.search("item" + i));
+        }
+    }
+
+    @Test
+    void testDeleteNonExistentElement() {
+        hashTable.delete("nonExistent");
+
+        // Ensure other elements are unaffected
+        hashTable.insert("existing");
+        assertTrue(hashTable.search("existing"));
+    }
+
+    @Test
+    void testInsertSpecialCharacters() {
+        hashTable.insert("!@#$%^&*()");
+        hashTable.insert("1234567890");
+
+        assertTrue(hashTable.search("!@#$%^&*()"));
+        assertTrue(hashTable.search("1234567890"));
+    }
+
+    @Test
+    void testDuplicateDeletes() {
+        hashTable.insert("apple");
+        hashTable.delete("apple");
+        hashTable.delete("apple"); // Trying to delete again
+
+        assertFalse(hashTable.search("apple"));
+    }
+
+    @Test
+    void testInsertDeleteRapid() {
+        for (int i = 0; i < 100; i++) {
+            hashTable.insert("item" + i);
+            hashTable.delete("item" + i);
+        }
+
+        // Ensure table is empty
+        for (int i = 0; i < 100; i++) {
+            assertFalse(hashTable.search("item" + i));
+        }
+    }
+
+    @Test
+    void testRehashingOnSizeThreshold() {
+        int initialCapacity = hashTable.getSize();
+
+        // Insert elements until rehashing is triggered
+        for (int i = 0; i < initialCapacity + 10; i++) {
+            hashTable.insert("key" + i);
+        }
+
+        int newCapacity = hashTable.getSize();
+        assertTrue(newCapacity > initialCapacity);
+    }
 }

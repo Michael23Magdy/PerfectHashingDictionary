@@ -3,7 +3,7 @@ package org.example.StringHashTable;
 import java.util.Arrays;
 
 public class HashTableNsquared implements HashTableInterface {
-    final int intialSize = 10;
+    final int intialSize = 100;
     private int currentPrime;
     private PrimeGenerator primeGenerator;
     private String[] table; 
@@ -42,6 +42,8 @@ public class HashTableNsquared implements HashTableInterface {
 
     @Override
     public Boolean search(String str) {
+        if(str == null) 
+            return false;
         int hashIndex = StringHasher.hash(str, currentPrime, table.length);
         return str.equals(table[hashIndex]);
     }
@@ -54,6 +56,7 @@ public class HashTableNsquared implements HashTableInterface {
         
         if(size*size >= table.length){
             rehash(table.length * 4);
+            hashIndex = StringHasher.hash(str, currentPrime, table.length);
         }
         int tries = 0;
         while(table[hashIndex] != null){
@@ -70,6 +73,8 @@ public class HashTableNsquared implements HashTableInterface {
 
     @Override
     public void delete(String str) {
+        if(str == null)
+            return;
         int deletionIndex = StringHasher.hash(str, currentPrime, table.length);
         if(table[deletionIndex] == null) return;
         table[deletionIndex] = null;
