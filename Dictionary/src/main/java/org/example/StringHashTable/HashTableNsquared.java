@@ -3,15 +3,24 @@ package org.example.StringHashTable;
 import java.util.Arrays;
 
 public class HashTableNsquared implements HashTableInterface {
-    final int intialSize = 10;
+    final int initialSize = 100;
     private int currentPrime;
     private PrimeGenerator primeGenerator;
     private String[] table; 
     private int size;
 
+    public void printTable() {
+        for (int i = 0; i < table.length; i++) {
+            if(table[i] !=  null){
+                System.out.println(table[i]+" -> "+i);
+            }
+        }
+        System.out.println("------------------------");
+    }
+
     public HashTableNsquared(){
         this.primeGenerator = PrimeGenerator.getInstance();
-        this.table = new String[intialSize];
+        this.table = new String[initialSize];
         this.size = 0;
         this.currentPrime = primeGenerator.getRandomPrime();
     }
@@ -43,6 +52,7 @@ public class HashTableNsquared implements HashTableInterface {
     @Override
     public Boolean search(String str) {
         int hashIndex = StringHasher.hash(str, currentPrime, table.length);
+        System.out.println(hashIndex);
         return str.equals(table[hashIndex]);
     }
 
@@ -53,10 +63,13 @@ public class HashTableNsquared implements HashTableInterface {
             return;
         
         if(size*size >= table.length){
+//            System.out.println("increase size and rehash");
             rehash(table.length * 4);
+            hashIndex = StringHasher.hash(str, currentPrime, table.length);
         }
         int tries = 0;
         while(table[hashIndex] != null){
+//            System.out.println("collision rehashing");
             if(tries > 10){
                 throw new RuntimeException("Rehashing failed after multiple attempts. Unable to insert: " + str);
             }
@@ -66,6 +79,8 @@ public class HashTableNsquared implements HashTableInterface {
         }
         table[hashIndex] = str;
         size++;
+
+//        printTable();
     }
 
     @Override
