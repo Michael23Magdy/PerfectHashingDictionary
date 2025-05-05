@@ -19,5 +19,11 @@ public class HashTableTwoLevel implements HashTableInterface{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }
+
+    @Override
+    public int getSize() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getSize'");
+    }
     
 }

@@ -36,23 +36,25 @@ public class HashTableNsquared implements HashTableInterface {
             newPrime = primeGenerator.getRandomPrime();
             newTable = hashtest(newPrime, newSize);
         } while(newTable == null);
-        table = newTable;
-        // table = Arrays.copyOf(newTable, newTable.length);
+        table = Arrays.copyOf(newTable, newTable.length);
         currentPrime = newPrime;
     }
 
     @Override
     public Boolean search(String str) {
         int hashIndex = StringHasher.hash(str, currentPrime, table.length);
-        return table[hashIndex] != null;
+        return str.equals(table[hashIndex]);
     }
 
     @Override
     public void insert(String str) {
+        int hashIndex = StringHasher.hash(str, currentPrime, table.length);
+        if(str.equals(table[hashIndex])) 
+            return;
+        
         if(size*size >= table.length){
             rehash(table.length * 4);
         }
-        int hashIndex = StringHasher.hash(str, currentPrime, table.length);
         int tries = 0;
         while(table[hashIndex] != null){
             if(tries > 10){
