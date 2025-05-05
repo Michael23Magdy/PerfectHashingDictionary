@@ -237,4 +237,12 @@ class HashTableNsquaredTest {
         int newCapacity = hashTable.getSize();
         assertTrue(newCapacity > initialCapacity);
     }
+
+    @Test
+    void testInsertLargeString() {
+        String largeString = "a".repeat(10000); // String of 10,000 'a' characters
+        hashTable.insert(largeString);
+
+        assertTrue(hashTable.search(largeString));
+    }
 }
