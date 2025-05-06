@@ -29,6 +29,7 @@ public class PrimeGenerator {
     }
 
     public int getRandomPrime(){
+//        System.out.println(primes.get((int) (Math.random() * primes.size())));
         return primes.get((int) (Math.random() * primes.size()));
     }
 

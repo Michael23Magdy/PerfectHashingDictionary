@@ -65,4 +65,9 @@ public class Dictionary implements DictionaryInterface{
     public int getSize(){
         return hashTable.getSize();
     }
+
+    @Override
+    public void printTable() {
+        hashTable.printTable();
+    }
 }

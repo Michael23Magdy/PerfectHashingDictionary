@@ -2,9 +2,12 @@ package org.example;
 
 public interface DictionaryInterface {
     Boolean search(String str);
-    Boolean insert(String str);
-    Boolean delete(String str);
-    int batchInsert(String path);
-    int batchDelete(String path);
+
+    void insert(String str);
+    void delete(String str);
+    void batchInsert(String path);
+    void bashDelete(String path);
+    void printTable();
     int getSize();
+
 }
