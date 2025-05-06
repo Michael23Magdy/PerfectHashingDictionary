@@ -5,5 +5,6 @@ public interface DictionaryInterface {
     Boolean insert(String str);
     Boolean delete(String str);
     int batchInsert(String path);
-    int bashDelete(String path);
+    int batchDelete(String path);
+    int getSize();
 }

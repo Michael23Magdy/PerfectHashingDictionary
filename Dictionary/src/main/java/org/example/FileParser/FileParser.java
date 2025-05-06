@@ -1,16 +1,20 @@
 package org.example.FileParser;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FileParser {
     public List<String> readFileContent(String filePath) throws IOException {
-        String content = Files.readString(Path.of(filePath));
-        return Arrays.stream(content.split("\\W+"))
-                     .filter(s -> !s.isBlank())
-                     .toList();
+      ArrayList<String> strings = new ArrayList<>();
+      BufferedReader br = new BufferedReader(new InputStreamReader(
+         getClass().getClassLoader().getResourceAsStream(filePath)));
+      String line;
+      while ((line = br.readLine()) != null) {
+         strings.add(line.trim());  // Read each line as a string and trim any extra spaces
+      }
+      return strings;
     }
 }

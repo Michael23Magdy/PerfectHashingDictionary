@@ -12,6 +12,7 @@ public class Dictionary implements DictionaryInterface{
     
     public Dictionary(HashTableInterface hashTable){
         this.hashTable = hashTable;
+        this.fileParser = new FileParser();
     }
 
     @Override
@@ -48,7 +49,7 @@ public class Dictionary implements DictionaryInterface{
     }
 
     @Override
-    public int bashDelete(String path) {
+    public int batchDelete(String path) {
         try {
             List<String> strings = fileParser.readFileContent(path);
             for(String string : strings){

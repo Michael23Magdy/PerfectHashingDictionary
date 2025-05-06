@@ -54,7 +54,6 @@ public class HashTableNsquared implements HashTableInterface {
         if(str == null) 
             return false;
         int hashIndex = StringHasher.hash(str, currentPrime, table.length);
-        System.out.println(hashIndex);
         return str.equals(table[hashIndex]);
     }
 

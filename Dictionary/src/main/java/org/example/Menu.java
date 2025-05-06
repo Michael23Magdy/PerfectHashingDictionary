@@ -1,28 +1,28 @@
 package org.example;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.Scanner;
 
 import org.example.StringHashTable.HashTableInterface;
+import org.example.StringHashTable.HashTableNsquared;
+import org.example.StringHashTable.HashTableTwoLevel;
 
 public class Menu {
     private DictionaryInterface dictionary;
 
     public void start() {
         Scanner scanner = new Scanner(System.in);
+        int hashTableType;
         do{
             System.out.println("Enter the type of hash table:");
             System.out.println("1. O(N^2) space");
             System.out.println("2. O(N) space");
-            int hashTableType = scanner.nextInt();
+            System.out.print("Enter Your Choice: ");
+            hashTableType = scanner.nextInt();
             if(hashTableType != 1 && hashTableType != 2)
                 System.out.println("Invalid choice. Please try again.");
         } while(hashTableType != 1 && hashTableType != 2);
         
-        HashTableInterface hashTable;
+        HashTableInterface hashTable = null;
         switch (hashTableType){
             case 1: 
                 hashTable = new HashTableNsquared();
@@ -42,13 +42,14 @@ public class Menu {
             System.out.println("4. Batch insert from file");
             System.out.println("5. Batch delete from file");
             System.out.println("6. Exit");
+            System.out.print("Enter Your Choice: ");
 
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
 
             switch (choice) {
                 case 1:
-                    System.out.println("Enter the string to insert:");
+                    System.out.print("Enter the string to insert: ");
                     String insertString = scanner.nextLine();
                     if (dictionary.insert(insertString)) {
                         System.out.println("String inserted successfully.");
@@ -58,7 +59,7 @@ public class Menu {
                     break;
 
                 case 2:
-                    System.out.println("Enter the string to delete:");
+                    System.out.print("Enter the string to delete: ");
                     String deleteString = scanner.nextLine();
                     if (dictionary.delete(deleteString)) {
                         System.out.println("String deleted successfully.");
@@ -68,7 +69,7 @@ public class Menu {
                     break;
 
                 case 3:
-                    System.out.println("Enter the string to search:");
+                    System.out.print("Enter the string to search: ");
                     String searchString = scanner.nextLine();
                     if (dictionary.search(searchString)) {
                         System.out.println("String exists in the dictionary.");
@@ -78,33 +79,25 @@ public class Menu {
                     break;
 
                 case 4:
-                    System.out.println("Enter the file path for batch insert:");
+                    System.out.print("Enter the file path for batch insert: ");
                     String insertFilePath = scanner.nextLine();
-                    try {
-                        int sizeBefore = dictionary.getSize();
-                        int numStrings = dictionary.batchInsert(insertFilePath);
-                        int sizeAfter = dictionary.getSize();
-                        int newStrings = sizeAfter - sizeBefore;
-                        System.out.println("Newly added strings: " + newStrings);
-                        System.out.println("Already existing strings: " + numsStrings - newStrings);
-                    } catch (IOException e) {
-                        System.out.println("Error reading file: " + e.getMessage());
-                    }
+                    int sizeBefore = dictionary.getSize();
+                    int numStrings = dictionary.batchInsert(insertFilePath);
+                    int sizeAfter = dictionary.getSize();
+                    int newStrings = sizeAfter - sizeBefore;
+                    System.out.println("Newly added strings: " + newStrings);
+                    System.out.println("Already existing strings: " + (numStrings - newStrings));
                     break;
 
                 case 5:
-                    System.out.println("Enter the file path for batch delete:");
+                    System.out.print("Enter the file path for batch delete: ");
                     String deleteFilePath = scanner.nextLine();
-                    try {
-                        int sizeBefore = dictionary.getSize();
-                        int deleteStrings = dictionary.batchDelete(deleteFilePath);
-                        int sizeAfter = dictionary.getSize();
-                        int removed = sizeBefore - sizeAfter
-                        System.out.println("Deleted strings: " + removed);
-                        System.out.println("Non-existing strings: " + deleteStrings - removed);
-                    } catch (IOException e) {
-                        System.out.println("Error reading file: " + e.getMessage());
-                    }
+                    int PreviousSize = dictionary.getSize();
+                    int deleteStrings = dictionary.batchDelete(deleteFilePath);
+                    int newSize = dictionary.getSize();
+                    int removed = PreviousSize - newSize;
+                    System.out.println("Deleted strings: " + removed);
+                    System.out.println("Non-existing strings: " + (deleteStrings - removed));
                     break;
 
                 case 6:
