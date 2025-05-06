@@ -5,6 +5,7 @@ public interface HashTableInterface {
     void insert(String str);
     void delete(String str);
     int getSize();
+   
     void printTable();
     int getNoRehashes();
 }

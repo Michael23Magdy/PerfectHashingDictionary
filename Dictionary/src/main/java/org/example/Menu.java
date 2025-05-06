@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import org.example.StringHashTable.HashTableInterface;
 import org.example.StringHashTable.HashTableNsquared;
-import org.example.StringHashTable.HashTableTwoLevel;
+import org.example.StringHashTable.HashTableN;
 
 public class Menu {
     private DictionaryInterface dictionary;
@@ -28,11 +28,11 @@ public class Menu {
                 hashTable = new HashTableNsquared();
                 break;
             case 2:
-                hashTable = new HashTableTwoLevel();
+                hashTable = new HashTableN(64);
                 break;
         }
-        
-        dictionary = new Dictionary(hashTable);
+        Dictionary realDictionary = new Dictionary(hashTable);
+        dictionary = new DictionaryTimeDecorator(realDictionary);
 
         while (true) {
             System.out.println("\nChoose an operation:");

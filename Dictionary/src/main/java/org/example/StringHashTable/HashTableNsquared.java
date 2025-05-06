@@ -8,6 +8,7 @@ public class HashTableNsquared implements HashTableInterface {
     private PrimeGenerator primeGenerator;
     private String[] table; 
     private int size;
+    private int noRehashes;
 
     public void printTable() {
         for (int i = 0; i < table.length; i++) {
@@ -19,13 +20,16 @@ public class HashTableNsquared implements HashTableInterface {
     }
 
     public HashTableNsquared(){
+        System.out.println("Starting hash table n^2 space...");
         this.primeGenerator = PrimeGenerator.getInstance();
         this.table = new String[initialSize];
         this.size = 0;
+        this.noRehashes = 0;
         this.currentPrime = primeGenerator.getRandomPrime();
     }
 
     private String[] hashtest(int key, int newSize){
+        this.noRehashes++;
         String[] newTable = new String[newSize];
         for (String string : table) {
             if(string != null){
@@ -67,14 +71,13 @@ public class HashTableNsquared implements HashTableInterface {
             rehash(table.length * 4);
             hashIndex = StringHasher.hash(str, currentPrime, table.length);
         }
-        int tries = 0;
+        int noRehashesBefore = this.noRehashes;
         while(table[hashIndex] != null){
-            if(tries > 10){
+            if(this.noRehashes - noRehashesBefore > 10){
                 throw new RuntimeException("Rehashing failed after multiple attempts. Unable to insert: " + str);
             }
             rehash(table.length);
             hashIndex = StringHasher.hash(str, currentPrime, table.length);
-            tries++;
         }
         table[hashIndex] = str;
         size++;
@@ -94,4 +97,5 @@ public class HashTableNsquared implements HashTableInterface {
     public int getSize(){
         return size;
     }
+    public int getNoRehashes(){ return noRehashes; }
 }

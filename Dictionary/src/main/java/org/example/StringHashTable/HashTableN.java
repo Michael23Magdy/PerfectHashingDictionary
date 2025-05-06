@@ -19,6 +19,7 @@ public class HashTableN implements HashTableInterface {
     private static final int MAX_REBUILD_ATTEMPTS = 100;
 
     public HashTableN(int initialSize) {
+        System.out.println("Starting hash table n space...");
         this.firstLevelSize = initialSize;
         this.primeGenerator = PrimeGenerator.getInstance();
 

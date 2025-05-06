@@ -67,6 +67,7 @@ class HashTableNsquaredTest {
 
     @Test
     void testRehashingTriggeredByQuadraticThreshold() {
+        int noRehashesBefore = hashTable.getTries();
         for (int i = 0; i < 20; i++) {
             hashTable.insert("item" + i);
         }
