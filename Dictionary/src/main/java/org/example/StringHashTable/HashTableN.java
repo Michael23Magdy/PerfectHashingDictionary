@@ -8,10 +8,11 @@ public class HashTableN implements HashTableInterface {
     private final PrimeGenerator primeGenerator;
     private final int firstLevelSize;
     private final int firstLevelKey;
+    
 
     private final String[] firstLevelBuckets; // first table is an array of string
     // new assumption: if collision happen then first table bucket will be empty.
-    private final SecondLevelTable[] secondLevelTables; // array of secondary tables
+    private final SecondLevelTable[] secondLevelTables; 
 
     private int rebuildCount = 0;
     private int totalItemCount = 0;
@@ -236,5 +237,8 @@ public class HashTableN implements HashTableInterface {
     public void printTable() {
         printTables();
     }
-
+    @Override
+    public int getNoRehashes(){
+        return rebuildCount;
+    }
 }

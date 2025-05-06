@@ -69,8 +69,9 @@ class HashTableNTest {
     void testRehashingTriggeredByQuadraticThreshold() {
         for (int i = 0; i < 20; i++) {
             hashTable.insert("item" + i);
+            
         }
-
+        System.err.println("Number of rehashes = "+hashTable.getNoRehashes());
         for (int i = 0; i < 20; i++) {
             assertTrue(hashTable.search("item" + i));
         }
@@ -114,7 +115,7 @@ class HashTableNTest {
         for (int i = 0; i < 20; i++) {
             hashTable.insert("mor" + i);
         }
-
+        System.err.println("Number of rehashes = "+hashTable.getNoRehashes());
         for (String s : toPreserve) {
             assertTrue(hashTable.search(s));
         }
@@ -140,7 +141,7 @@ class HashTableNTest {
         for (int i = 0; i < 1000; i++) {
             assertTrue(hashTable.search("data" + i));
         }
-
+        System.err.println("Number of rehashes = "+hashTable.getNoRehashes());
         assertEquals(1000, hashTable.getSize());
     }
 
@@ -175,11 +176,11 @@ class HashTableNTest {
     }
 
     @Test
-    void testInsertLargeNumber() { /// ///////////
+    void testInsertLargeNumber() { 
         for (int i = 0; i < 10000; i++) {
             hashTable.insert("item" + i);
         }
-
+        System.err.println("Number of rehashes = "+hashTable.getNoRehashes());
         for (int i = 0; i < 10000; i++) {
             assertTrue(hashTable.search("item" + i));
         }
