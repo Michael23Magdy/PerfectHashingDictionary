@@ -6,4 +6,5 @@ public interface DictionaryInterface {
     void delete(String str);
     void batchInsert(String path);
     void bashDelete(String path);
+    void printTable();
 }

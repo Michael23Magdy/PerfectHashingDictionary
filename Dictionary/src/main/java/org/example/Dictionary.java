@@ -48,4 +48,9 @@ public class Dictionary implements DictionaryInterface{
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void printTable() {
+        hashTable.printTable();
+    }
 }

@@ -9,46 +9,62 @@ public class HashTableN implements HashTableInterface {
     private final int firstLevelSize;
     private final int firstLevelKey;
 
-    private final List<String>[] firstLevelBuckets; // first table is an array of arraylists
+    private final String[] firstLevelBuckets; // first table is an array of string
+    // new assumption: if collision happen then first table bucket will be empty.
     private final SecondLevelTable[] secondLevelTables; // array of secondary tables
 
     private int rebuildCount = 0;
     private int totalItemCount = 0;
-    private static final int MAX_REBUILD_ATTEMPTS = 100000000;
+    private static final int MAX_REBUILD_ATTEMPTS = 100;
 
     public HashTableN(int initialSize) {
         this.firstLevelSize = initialSize;
         this.primeGenerator = PrimeGenerator.getInstance();
 
         this.firstLevelKey = primeGenerator.getRandomPrime();
-        this.firstLevelBuckets = new List[initialSize];
+        this.firstLevelBuckets = new String[initialSize];
         this.secondLevelTables = new SecondLevelTable[initialSize];
-
-        for (int i = 0; i < initialSize; i++) {
-            firstLevelBuckets[i] = new ArrayList<>();
-        }
     }
 
     @Override
     public void insert(String str) {
-        if (str == null) return;
+        if (str == null) throw new NullPointerException();
 
-        int index = StringHasher.hash(str, firstLevelKey, firstLevelSize);
+        int index = StringHasher.javaHash(str, firstLevelKey, firstLevelSize);
 
         if(secondLevelTables[index] == null) {
-            if(!firstLevelBuckets[index].isEmpty() && firstLevelBuckets[index].getFirst().equals(str)) return; // already exists in the firstLevelBucket
+            if(firstLevelBuckets[index] == null) {
+                firstLevelBuckets[index] = str;
+            } else if(firstLevelBuckets[index].equals(str)) { // already exists in the firstLevelBucket
+                return;
+            } else {
+                buildSecondLevelTable(index, str);
+            }
         } else {
             if(secondLevelTables[index].contains(str)) return; // already exists in the secondLevelBucket
+            buildSecondLevelTable(index, str);
         }
 
-        firstLevelBuckets[index].add(str);
-        buildSecondLevelTable(index);
         totalItemCount++;
-        printTables();
     }
 
-    private void buildSecondLevelTable(int bucketIndex) {
-        List<String> bucket = firstLevelBuckets[bucketIndex];
+    private void buildSecondLevelTable(int bucketIndex, String newString) {
+
+        List<String> bucket = new ArrayList<>();
+
+        SecondLevelTable oldTable = secondLevelTables[bucketIndex];
+
+        if(oldTable == null) {
+            oldTable = new SecondLevelTable(primeGenerator.getRandomPrime(), 0);
+            bucket.add(firstLevelBuckets[bucketIndex]);
+            firstLevelBuckets[bucketIndex] = null;
+        }
+
+        for (String s : oldTable.table) {
+            if (s != null) bucket.add(s);
+        }
+
+        if (newString != null) bucket.add(newString);
 
         boolean collisionFound = true;
         int attempts = 0;
@@ -57,6 +73,7 @@ public class HashTableN implements HashTableInterface {
 
         if (secondLevelSize == 1) {
             secondLevelTables[bucketIndex] = null;
+            firstLevelBuckets[bucketIndex] = bucket.getFirst();
             return;
         }
 
@@ -65,11 +82,11 @@ public class HashTableN implements HashTableInterface {
             collisionFound = false;
 
             int hashKey = primeGenerator.getRandomPrime();
-            SecondLevelTable newTable = new SecondLevelTable(hashKey, secondLevelSize);
+            SecondLevelTable newTable = new SecondLevelTable(hashKey, secondLevelSize + attempts);
             String[] table = newTable.table;
 
             for (String item : bucket) {
-                int index = StringHasher.hash(item, hashKey, secondLevelSize);
+                int index = StringHasher.javaHash(item, hashKey, secondLevelSize + attempts);
 
                 if (table[index] != null) {
                     collisionFound = true;
@@ -98,12 +115,14 @@ public class HashTableN implements HashTableInterface {
     public Boolean search(String str) {
         if (str == null) return false;
 
-        int index = StringHasher.hash(str, firstLevelKey, firstLevelSize);
+        int index = StringHasher.javaHash(str, firstLevelKey, firstLevelSize);
 
-        if (firstLevelBuckets[index].isEmpty()) return false;
 
         if(secondLevelTables[index] == null) {
-            return firstLevelBuckets[index].getFirst().equals(str);
+            if (firstLevelBuckets[index] == null) return false;
+            else {
+                return firstLevelBuckets[index].equals(str);
+            }
         } else {
             return secondLevelTables[index].contains(str);
         }
@@ -113,20 +132,19 @@ public class HashTableN implements HashTableInterface {
     public void delete(String str) {
         if (str == null) return;
 
-        int index = StringHasher.hash(str, firstLevelKey, firstLevelSize);
+        int index = StringHasher.javaHash(str, firstLevelKey, firstLevelSize);
 
         if(!search(str)) {
             return;
         }
 
         if(secondLevelTables[index] == null) {
-            firstLevelBuckets[index].removeFirst();
+            firstLevelBuckets[index] = null;
         } else {
-            firstLevelBuckets[index].remove(str); // not o(1) :(
-            buildSecondLevelTable(index);
+            secondLevelTables[index].delete(str);
+            buildSecondLevelTable(index, null);
         }
         totalItemCount--;
-        printTables();
     }
 
     public int getRebuildCount() {
@@ -173,9 +191,14 @@ public class HashTableN implements HashTableInterface {
         }
 
         public boolean contains(String str) {
-            int index = StringHasher.hash(str, key, size);
+            int index = StringHasher.javaHash(str, key, size);
             if(table[index] == null) return false;
             return table[index].equals(str);
+        }
+
+        public void delete(String str) {
+            int index = StringHasher.javaHash(str, key, size);
+            table[index] = null;
         }
 
         public int getSize() {
@@ -183,7 +206,7 @@ public class HashTableN implements HashTableInterface {
         }
     }
 
-    private void printTables() {
+    public void printTables() {
         System.out.println("---- Hash Table Contents ----");
 
         for (int i = 0; i < firstLevelSize; i++) {
@@ -206,7 +229,12 @@ public class HashTableN implements HashTableInterface {
 
     @Override
     public int getSize() {
-        return firstLevelSize;
+        return totalItemCount;
+    }
+
+    @Override
+    public void printTable() {
+        printTables();
     }
 
 }
