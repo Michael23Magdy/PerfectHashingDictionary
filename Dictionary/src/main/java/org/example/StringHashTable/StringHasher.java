@@ -10,7 +10,6 @@ public class StringHasher {
         for (char c : str.toCharArray()) {
             hash = (hash + c * power) % mod;
             power = (power * key) % mod;
-            System.out.println("+========================" + hash + " " + power +"============");
         }
         return (int) hash;
     }

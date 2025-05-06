@@ -3,11 +3,10 @@ package org.example;
 public interface DictionaryInterface {
     Boolean search(String str);
 
-    void insert(String str);
-    void delete(String str);
-    void batchInsert(String path);
-    void bashDelete(String path);
+    Boolean insert(String str);
+    Boolean delete(String str);
+    int batchInsert(String path);
+    int batchDelete(String path);
     void printTable();
     int getSize();
-
 }

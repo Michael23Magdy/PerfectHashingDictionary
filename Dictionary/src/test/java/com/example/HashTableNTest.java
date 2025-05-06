@@ -67,13 +67,16 @@ class HashTableNTest {
 
     @Test
     void testRehashingTriggeredByQuadraticThreshold() {
+        int noRehashesBefore = hashTable.getNoRehashes();
         for (int i = 0; i < 20; i++) {
             hashTable.insert("item" + i);
         }
-
+        int noRehashesAfter = hashTable.getNoRehashes();
+        int noRehashes = noRehashesAfter - noRehashesBefore;
         for (int i = 0; i < 20; i++) {
             assertTrue(hashTable.search("item" + i));
         }
+        System.out.println(noRehashes);
 
         assertEquals(20, hashTable.getSize());
     }
@@ -133,14 +136,18 @@ class HashTableNTest {
 
     @Test
     void testStressWithManyInserts() { //
+        int noRehashesBefore = hashTable.getNoRehashes();
         for (int i = 0; i < 1000; i++) {
             hashTable.insert("data" + i);
         }
+        int noRehashesAfter = hashTable.getNoRehashes();
+        int noRehashes = noRehashesAfter - noRehashesBefore;
+
 
         for (int i = 0; i < 1000; i++) {
             assertTrue(hashTable.search("data" + i));
         }
-
+        System.out.println(noRehashes);
         assertEquals(1000, hashTable.getSize());
     }
 
@@ -176,13 +183,18 @@ class HashTableNTest {
 
     @Test
     void testInsertLargeNumber() { /// ///////////
+        int noRehashesBefore = hashTable.getNoRehashes();
         for (int i = 0; i < 10000; i++) {
             hashTable.insert("item" + i);
         }
+        int noRehashesAfter = hashTable.getNoRehashes();
+        int noRehashes = noRehashesAfter - noRehashesBefore;
 
         for (int i = 0; i < 10000; i++) {
             assertTrue(hashTable.search("item" + i));
         }
+        System.out.println(noRehashes);
+
     }
 
     @Test
