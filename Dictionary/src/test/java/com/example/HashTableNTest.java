@@ -12,7 +12,7 @@ class HashTableNTest {
 
     @BeforeEach
     void setUp() {
-        hashTable = new HashTableN(64);
+        hashTable = new HashTableN(100);
     }
 
     @Test
@@ -66,7 +66,7 @@ class HashTableNTest {
     }
 
     @Test
-    void testRehashingTriggeredByQuadraticThreshold() {
+    void testRehashingTriggeredByQuadraticThreshold() {      //////
         int noRehashesBefore = hashTable.getNoRehashes();
         for (int i = 0; i < 20; i++) {
             hashTable.insert("item" + i);
@@ -76,6 +76,7 @@ class HashTableNTest {
         int noRehashes = noRehashesAfter - noRehashesBefore;
 
         for (int i = 0; i < 20; i++) {
+            //System.out.println(i);
             assertTrue(hashTable.search("item" + i));
         }
         System.out.println(noRehashes);
