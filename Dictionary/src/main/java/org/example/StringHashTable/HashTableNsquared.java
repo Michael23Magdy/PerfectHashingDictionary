@@ -65,13 +65,11 @@ public class HashTableNsquared implements HashTableInterface {
             return;
         
         if(size*size >= table.length){
-//            System.out.println("increase size and rehash");
             rehash(table.length * 4);
             hashIndex = StringHasher.hash(str, currentPrime, table.length);
         }
         int tries = 0;
         while(table[hashIndex] != null){
-//            System.out.println("collision rehashing");
             if(tries > 10){
                 throw new RuntimeException("Rehashing failed after multiple attempts. Unable to insert: " + str);
             }
@@ -81,8 +79,6 @@ public class HashTableNsquared implements HashTableInterface {
         }
         table[hashIndex] = str;
         size++;
-
-//        printTable();
     }
 
     @Override
