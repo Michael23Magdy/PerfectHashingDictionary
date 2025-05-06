@@ -72,7 +72,9 @@ class HashTableNTest {
             hashTable.insert("item" + i);
             
         }
-        System.err.println("Number of rehashes = "+hashTable.getNoRehashes());
+        int noRehashesAfter = hashTable.getNoRehashes();
+        int noRehashes = noRehashesAfter - noRehashesBefore;
+
         for (int i = 0; i < 20; i++) {
             assertTrue(hashTable.search("item" + i));
         }
@@ -107,7 +109,7 @@ class HashTableNTest {
         hashTable.insert("x");
         hashTable.insert("y");
         hashTable.insert("z");
-
+        int noRehashesBefore = hashTable.getNoRehashes();
         String[] toPreserve = {"x", "y", "z"};
         for (String s : toPreserve) {
             assertTrue(hashTable.search(s));
@@ -117,7 +119,10 @@ class HashTableNTest {
         for (int i = 0; i < 20; i++) {
             hashTable.insert("mor" + i);
         }
-        System.err.println("Number of rehashes = "+hashTable.getNoRehashes());
+        int noRehashesAfter = hashTable.getNoRehashes();
+        int noRehashes = noRehashesAfter - noRehashesBefore;
+        System.out.println(noRehashes);
+
         for (String s : toPreserve) {
             assertTrue(hashTable.search(s));
         }
@@ -147,7 +152,7 @@ class HashTableNTest {
         for (int i = 0; i < 1000; i++) {
             assertTrue(hashTable.search("data" + i));
         }
-        System.err.println("Number of rehashes = "+hashTable.getNoRehashes());
+        System.out.println(noRehashes);
         assertEquals(1000, hashTable.getSize());
     }
 
@@ -182,11 +187,15 @@ class HashTableNTest {
     }
 
     @Test
-    void testInsertLargeNumber() { 
+    void testInsertLargeNumber() {
+        int noRehashesBefore = hashTable.getNoRehashes();
+
         for (int i = 0; i < 10000; i++) {
             hashTable.insert("item" + i);
         }
-        System.err.println("Number of rehashes = "+hashTable.getNoRehashes());
+        int noRehashesAfter = hashTable.getNoRehashes();
+        int noRehashes = noRehashesAfter - noRehashesBefore;
+
         for (int i = 0; i < 10000; i++) {
             assertTrue(hashTable.search("item" + i));
         }
