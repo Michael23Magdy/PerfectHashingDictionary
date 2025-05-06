@@ -1,6 +1,8 @@
 package org.example;
 
 import java.io.IOException;
+import java.util.List;
+
 import org.example.FileParser.FileParser;
 import org.example.StringHashTable.HashTableInterface;
 
@@ -10,6 +12,7 @@ public class Dictionary implements DictionaryInterface{
     
     public Dictionary(HashTableInterface hashTable){
         this.hashTable = hashTable;
+        this.fileParser = new FileParser();
     }
 
     @Override
@@ -18,35 +21,49 @@ public class Dictionary implements DictionaryInterface{
     }
 
     @Override
-    public void insert(String str) {
+    public Boolean insert(String str) {
+        if(hashTable.search(str)) return false;
         hashTable.insert(str);
+        return true;
     }
 
     @Override
-    public void delete(String str) {
+    public Boolean delete(String str) {
+        if(!hashTable.search(str)) return false;
         hashTable.delete(str);
+        return true;
     }
 
     @Override
-    public void batchInsert(String path) {
+    public int batchInsert(String path) {
         try {
-            for(String string : fileParser.readFileContent(path)){
+            List<String> strings = fileParser.readFileContent(path);
+            for(String string : strings){
                 hashTable.insert(string);
             }
+            return strings.size();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return 0;
     }
 
     @Override
-    public void bashDelete(String path) {
+    public int batchDelete(String path) {
         try {
-            for(String string : fileParser.readFileContent(path)){
+            List<String> strings = fileParser.readFileContent(path);
+            for(String string : strings){
                 hashTable.delete(string);
             }
+            return strings.size();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return 0;
+    }
+
+    public int getSize(){
+        return hashTable.getSize();
     }
 
     @Override
