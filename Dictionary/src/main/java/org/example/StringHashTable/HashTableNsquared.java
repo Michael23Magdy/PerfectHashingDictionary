@@ -3,7 +3,7 @@ package org.example.StringHashTable;
 import java.util.Arrays;
 
 public class HashTableNsquared implements HashTableInterface {
-    final int initialSize = 100;
+    final int initialSize = 1000000;
     private int currentPrime;
     private PrimeGenerator primeGenerator;
     private String[] table; 

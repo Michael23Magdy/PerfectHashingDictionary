@@ -28,7 +28,7 @@ public class Menu {
                 hashTable = new HashTableNsquared();
                 break;
             case 2:
-                hashTable = new HashTableN(64);
+                hashTable = new HashTableN();
                 break;
         }
         Dictionary realDictionary = new Dictionary(hashTable);
